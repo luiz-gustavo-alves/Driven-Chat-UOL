@@ -1,4 +1,63 @@
-body {
+/* Importando fonte: Roboto */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700&display=swap');
 
-    background-color: red;
+* {
+    box-sizing: border-box;
+}
+
+body {
+    
+    padding: 100px 0;
+    background-color: #E5E5E5;
+    font-family: 'Roboto', sans-serif;
+}
+
+header, footer {
+    
+    width: 100%;
+    height: 80px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFFFFF;
+    z-index: 9999;
+}
+
+header {
+
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0; 
+    left: 0;
+}
+
+header ion-icon {
+
+    width: 42px;
+    height: 100%;
+}
+
+footer {
+
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+footer input {
+
+    width: 80%;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;    
+}
+
+footer ion-icon {
+
+    width: 26px;
+    height: 100%;
 }
