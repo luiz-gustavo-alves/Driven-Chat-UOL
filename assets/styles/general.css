@@ -8,7 +8,7 @@
 body {
     
     padding: 100px 0;
-    background-color: #E5E5E5;
+    background-color: #f3f3f3;
     font-family: 'Roboto', sans-serif;
 }
 
@@ -60,4 +60,59 @@ footer ion-icon {
 
     width: 26px;
     height: 100%;
+}
+
+.chat {
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chat > li {
+
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+    word-break: break-word;
+    line-height: 20px;
+}
+
+.timestamp {
+
+    color: #AAAAAA;
+    padding-right: 5px;
+}
+
+.username, .bold {
+
+    color: #000000;
+    font-weight: 700;
+}
+
+.text {
+    
+    color: #000000;
+}
+
+.text-message {
+
+    color: #000000;
+    padding-left: 5px;
+}
+
+.join, .leave {
+
+    background-color: #DCDCDC;
+}
+
+.normal-message {
+
+    background-color: #FFFFFF;
+}
+
+.direct-message {
+    
+    background-color: #FFDEDE;
 }
