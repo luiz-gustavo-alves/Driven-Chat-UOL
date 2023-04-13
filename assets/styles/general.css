@@ -85,7 +85,7 @@ footer ion-icon {
     padding-right: 5px;
 }
 
-.username, .bold {
+.username, .everyone {
 
     color: #000000;
     font-weight: 700;
@@ -96,13 +96,7 @@ footer ion-icon {
     color: #000000;
 }
 
-.text-message {
-
-    color: #000000;
-    padding-left: 5px;
-}
-
-.join, .leave {
+.status {
 
     background-color: #DCDCDC;
 }
