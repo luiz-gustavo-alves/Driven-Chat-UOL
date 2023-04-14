@@ -1,7 +1,7 @@
 let messages = [];
 let usersList = [];
 let userName;
-let currentSelectedUser;
+let currentSelectedUser = 'Todos';
 let currentSelectedVisibility;
 
 const userURL = 'https://mock-api.driven.com.br/api/vm/uol/participants';
@@ -14,7 +14,7 @@ axios.defaults.headers.common['Authorization'] = token;
 function renderMessages() {
 
     const chat = document.querySelector(".chat");
-    chat.innerHTML = "";
+    chat.innerHTML = '';
 
     for (let i = 0; i < messages.length; i++) {
 
@@ -48,26 +48,13 @@ function renderMessages() {
 
 function renderUsersList() {
 
-    const onlineUsers = document.querySelector(".online-users");
-    currentSelectedUser = onlineUsers.querySelector(".selected-option" + " h3");
+    const onlineUsersList = document.querySelector(".online-users");
 
-    let hidden = 'hidden';
-    let selectedOption = '';
-
-    if (currentSelectedUser != null) {
-
-        if (currentSelectedUser.innerHTML === 'Todos') {
-
-            hidden = '';
-            selectedOption = 'selected-option';
-        }
-    }
-
-    onlineUsers.innerHTML = `
-        <div class="user-content ${selectedOption}" onclick="selectChatOption('.online-users', this)">
+    onlineUsersList.innerHTML = `
+        <div class="user-content" onclick="selectChatOption('.online-users', this)">
             <ion-icon name="people"></ion-icon>
             <h3>Todos</h3>
-            <div class="check ${hidden}">
+            <div class="check hidden">
                 <ion-icon name="checkmark"></ion-icon>
             </div>
         </div>
@@ -77,32 +64,51 @@ function renderUsersList() {
 
         let user = usersList[i];
 
-        if (hidden === '') {
-            
-            hidden = 'hidden';
-            selectedOption = '';
-        }
-
-        if (currentSelectedUser != null) {
-
-            if (currentSelectedUser.innerHTML === user.name) {
-                
-                hidden = '';
-                selectedOption = 'selected-option';
-            }
-        }
-
-        onlineUsers.innerHTML += `
-            <div class="user-content ${selectedOption}" onclick="selectChatOption('.online-users', this)">
+        onlineUsersList.innerHTML += `
+            <div class="user-content" onclick="selectChatOption('.online-users', this)">
                 <ion-icon name="person-circle"></ion-icon>
                 <h3>${user.name}</h3>
-                <div class="check ${hidden}">
+                <div class="check hidden">
                     <ion-icon name="checkmark"></ion-icon>
                 </div>
             </div>
         `;
     }
 
+    const usersContentList = onlineUsersList.querySelectorAll(".user-content");
+    let offlineUser = true;
+    
+    /* Check if current selected user is online and check that user*/
+    for (let i = 0; i < usersList.length; i++) {
+
+        if (usersList[i].name === currentSelectedUser) {
+
+            console.log(`Selecting user: ${usersList[i].name}`);
+
+            const selectedUser = usersContentList[i + 1];
+            const check = selectedUser.querySelector(".check");
+
+            selectedUser.classList.add("selected-option");
+            check.classList.remove("hidden");
+            
+            offlineUser = false;
+            break;
+        }
+    }
+
+    /* If current selected user is offline, checks everyone user */
+    if (offlineUser) {
+
+        console.log("Offline User! - Selecting user: Todos");
+         
+        const everyoneUser = usersContentList[0];
+        const check = everyoneUser.querySelector(".check");
+
+        everyoneUser.classList.add("selected-option");
+        check.classList.remove("hidden");
+
+        currentSelectedUser = 'Todos';
+    }
     console.log("User list render");
 }
 
@@ -185,7 +191,7 @@ function sendMessage() {
 
     const message = {
         from: userName,
-        to: "Todos",
+        to: currentSelectedUser,
         text: messageInput.value,
         type: "message"
     };
@@ -211,7 +217,10 @@ messageInput.addEventListener("keyup", event => {
         sendMessage();
     }
 });
+
+
 userAuth(); 
+
 
 function toggleSidebar() {
 
@@ -223,7 +232,7 @@ function selectChatOption(optionType, selector) {
 
     const option = document.querySelector(optionType + " .selected-option");
 
-    if (option != null) {
+    if (option !== null) {
 
         const lastCheckOption = option.querySelector(".check");
 
@@ -235,6 +244,12 @@ function selectChatOption(optionType, selector) {
 
     const currentCheckOption = selector.querySelector(".check");
     currentCheckOption.classList.remove("hidden");
+
+    if (optionType === '.online-users') {
+        
+        currentSelectedUser = selector.querySelector("h3").innerHTML;
+        console.log(`Selecting user: ${currentSelectedUser}`);
+    }
 
     if (optionType === '.chat-visibility') {
 
