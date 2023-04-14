@@ -21,7 +21,7 @@ header, footer {
     align-items: center;
     justify-content: space-between;
     background-color: #FFFFFF;
-    z-index: 9999;
+    z-index: 999;
 }
 
 header {
@@ -110,4 +110,125 @@ footer ion-icon {
 .direct-message {
     
     background-color: #FFDEDE;
+}
+
+.sidebar-opacity, .sidebar-content {
+
+    height: 100%;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+}
+
+.sidebar-opacity {
+
+    background-color: black;
+    opacity: 0.5;
+    width: 30%;
+    left: 0;
+}
+
+.sidebar-content {
+
+    background-color: #FFFFFF;
+    opacity: 1;
+    width: 70%;
+    right: 0;
+    padding-top: 20px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-content h2 {
+    
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.everyone-user {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 20px 0 20px;
+    height: 50px;
+}
+
+.everyone-user ion-icon {
+
+    width: 24px;
+    height: 24px;
+}
+
+.online-users {
+
+    margin: 10px 0;
+    overflow-y: scroll;
+}
+
+.online-users h3 {
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 50%;
+}
+
+.online-users,
+.chat-visibility {
+
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-content,
+.chat-visibility > div{
+
+    display: flex;
+    align-items: center;
+    height: 26px;
+    gap: 10px;
+
+    font-size: 16px;
+}
+
+.sidebar-content ion-icon {
+
+    width: 24px;
+    height: 24px;
+}
+
+.chat-visibility ion-icon {
+
+    width: 22px;
+    height: 22px;
+}
+
+.everyone-user,
+.online-users,
+.chat-visibility {
+
+    position: relative;
+}
+
+.check {
+
+    position: absolute;
+    right: 20px;
+}
+
+.check ion-icon {
+
+    width: 20px;
+    height: 20px;
+    color: green;
+}
+
+.hidden {
+
+    display: none;
 }
