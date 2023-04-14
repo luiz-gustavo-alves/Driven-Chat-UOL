@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+ion-icon {
+
+    cursor: pointer;
+}
+
 body {
     
     padding: 100px 0;
@@ -60,7 +65,6 @@ footer ion-icon {
 
     width: 26px;
     height: 100%;
-    cursor: pointer;
 }
 
 .chat {
@@ -126,6 +130,7 @@ footer ion-icon {
     opacity: 0.5;
     width: 30%;
     left: 0;
+    cursor: pointer;
 }
 
 .sidebar-content {
@@ -148,21 +153,6 @@ footer ion-icon {
     margin: 10px 0;
 }
 
-.everyone-user {
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 20px 20px 0 20px;
-    height: 50px;
-}
-
-.everyone-user ion-icon {
-
-    width: 24px;
-    height: 24px;
-}
-
 .online-users {
 
     margin: 10px 0;
@@ -173,7 +163,7 @@ footer ion-icon {
 
     text-overflow: ellipsis;
     overflow: hidden;
-    max-width: 50%;
+    max-width: 70%;
 }
 
 .online-users,
@@ -208,11 +198,16 @@ footer ion-icon {
     height: 22px;
 }
 
-.everyone-user,
 .online-users,
 .chat-visibility {
 
     position: relative;
+}
+
+.online-users h3,
+.chat-visibility h3 {
+
+    cursor: pointer;
 }
 
 .check {

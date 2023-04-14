@@ -9,43 +9,21 @@
     <title>Chat UOL</title>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-opacity"></div>
+    <div class="sidebar hidden">
+        <div class="sidebar-opacity" onclick="toggleSidebar()"></div>
         <div class="sidebar-content">
             <h2>Escolha um contato para enviar mensagem:</h2>
-            <div class="everyone-user">
-                <ion-icon name="people"></ion-icon>
-                <h3>Todos</h3>
-                <div class="check hidden">
-                    <ion-icon name="checkmark"></ion-icon>
-                </div>
-            </div>
-            <div class="online-users">
-                <div class="user-content">
-                    <ion-icon name="person-circle"></ion-icon>
-                    <h3>João</h3>
-                    <div class="check hidden">
-                        <ion-icon name="checkmark"></ion-icon>
-                    </div>
-                </div>
-                <div class="user-content">
-                    <ion-icon name="person-circle"></ion-icon>
-                    <h3>Maria</h3>
-                    <div class="check hidden">
-                        <ion-icon name="checkmark"></ion-icon>
-                    </div>
-                </div>
-            </div>
+            <div class="online-users"></div>
             <h2>Escolha a visibilidade:</h2>
             <div class="chat-visibility">
-                <div class="chat-visibility-content">
+                <div class="chat-visibility-content" onclick="selectChatOption('.chat-visibility', this)">
                     <ion-icon name="lock-open"></ion-icon>
                     <h3>Público</h3>
                     <div class="check hidden">
                         <ion-icon name="checkmark"></ion-icon>
                     </div>
                 </div>
-                <div class="chat-visibility-content">
+                <div class="chat-visibility-content" onclick="selectChatOption('.chat-visibility', this)">
                     <ion-icon name="lock-closed"></ion-icon>
                     <h3>Reservadamente</h3>
                     <div class="check hidden">
@@ -58,36 +36,11 @@
 
     <header>
         <h1><img src="./assets/logo 1.png"></h1>
-        <ion-icon name="people"></ion-icon>
+        <ion-icon name="people" onclick="toggleSidebar()"></ion-icon>
     </header>
 
     <main>
-        <ul class="chat">
-            <li class="status">
-                <span class="timestamp">(09:21:45)</span> 
-                <span class="username">João</span> 
-                <span class="text">entra na sala...</span> 
-            </li>
-            <li class="normal-message">
-                <span class="timestamp">(09:22:28)</span> 
-                <span class="username">João</span>
-                <span class="text">para</span>
-                <span class="everyone">Todos:</span>
-                <span class="text">Bom dia</span>
-            </li>
-            <li class="direct-message">
-                <span class="timestamp">(09:22:48)</span> 
-                <span class="username">João</span>
-                <span class="text">reservadamente para</span>
-                <span class="username">Maria:</span>
-                <span class="text">Oi gatinha quer tc?</span>
-            </li>
-            <li class="status">
-                <span class="timestamp">(09:22:58)</span> 
-                <span class="username">Maria</span> 
-                <span class="text">sai da sala...</span> 
-            </li>
-        </ul>
+        <ul class="chat"></ul>
     </main>
 
     <footer>
@@ -97,6 +50,6 @@
     
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- <script src="./scripts/general.js"></script> -->
+    <script src="./scripts/general.js"></script>
 </body>
 </html>
