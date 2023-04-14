@@ -204,6 +204,13 @@ function sendMessage() {
     });
 }
 
+/* Send message by pressing enter */
+const messageInput = document.querySelector(".message-input");
+messageInput.addEventListener("keyup", event => {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
 userAuth(); 
 
 function toggleSidebar() {
