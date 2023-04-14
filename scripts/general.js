@@ -56,9 +56,7 @@ function renderUsersList() {
 
     if (currentSelectedUser != null) {
 
-        currentSelectedUser = currentSelectedUser.innerHTML;
-
-        if (currentSelectedUser=== 'Todos') {
+        if (currentSelectedUser.innerHTML === 'Todos') {
 
             hidden = '';
             selectedOption = 'selected-option';
@@ -87,9 +85,8 @@ function renderUsersList() {
 
         if (currentSelectedUser != null) {
 
-            currentSelectedUser = currentSelectedUser.innerHTML;
-
-            if (currentSelectedUser === user.name) {
+            if (currentSelectedUser.innerHTML === user.name) {
+                
                 hidden = '';
                 selectedOption = 'selected-option';
             }
@@ -148,7 +145,10 @@ function userAuth() {
     const userAuthPromise = axios.post(userURL, authUser);
 
     /* User authenticated */
-    userAuthPromise.then(() => {   
+    userAuthPromise.then(() => {
+
+        checkMessages();
+        checkUserList(); 
 
         console.log("User authenticated.");
 
@@ -204,8 +204,6 @@ function sendMessage() {
     });
 }
 
-checkMessages();
-checkUserList(); 
 userAuth(); 
 
 function toggleSidebar() {
