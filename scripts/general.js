@@ -1,5 +1,8 @@
 let messages = [];
+let usersList = [];
 let userName;
+let currentSelectedUser;
+let currentSelectedVisibility;
 
 const userURL = 'https://mock-api.driven.com.br/api/vm/uol/participants';
 const userStatusURL = 'https://mock-api.driven.com.br/api/vm/uol/status';
@@ -43,6 +46,97 @@ function renderMessages() {
     }
 }
 
+function renderUsersList() {
+
+    const onlineUsers = document.querySelector(".online-users");
+    currentSelectedUser = onlineUsers.querySelector(".selected-option" + " h3");
+
+    let hidden = 'hidden';
+    let selectedOption = '';
+
+    if (currentSelectedUser != null) {
+
+        currentSelectedUser = currentSelectedUser.innerHTML;
+
+        if (currentSelectedUser=== 'Todos') {
+
+            hidden = '';
+            selectedOption = 'selected-option';
+        }
+    }
+
+    onlineUsers.innerHTML = `
+        <div class="user-content ${selectedOption}" onclick="selectChatOption('.online-users', this)">
+            <ion-icon name="people"></ion-icon>
+            <h3>Todos</h3>
+            <div class="check ${hidden}">
+                <ion-icon name="checkmark"></ion-icon>
+            </div>
+        </div>
+    `;
+
+    for (let i = 0; i < usersList.length; i++) {
+
+        let user = usersList[i];
+
+        if (hidden === '') {
+            
+            hidden = 'hidden';
+            selectedOption = '';
+        }
+
+        if (currentSelectedUser != null) {
+
+            currentSelectedUser = currentSelectedUser.innerHTML;
+
+            if (currentSelectedUser === user.name) {
+                hidden = '';
+                selectedOption = 'selected-option';
+            }
+        }
+
+        onlineUsers.innerHTML += `
+            <div class="user-content ${selectedOption}" onclick="selectChatOption('.online-users', this)">
+                <ion-icon name="person-circle"></ion-icon>
+                <h3>${user.name}</h3>
+                <div class="check ${hidden}">
+                    <ion-icon name="checkmark"></ion-icon>
+                </div>
+            </div>
+        `;
+    }
+
+    console.log("User list render");
+}
+
+function checkMessages() {
+
+    const renderMessagesPromise = axios.get(msgURL);
+
+    renderMessagesPromise.then(res => {
+        messages = res.data;
+        renderMessages();
+    });
+
+    renderMessagesPromise.catch(err => {
+        console.log(err);
+    });
+}
+
+function checkUserList() {
+
+    const renderUserListPromise = axios.get(userURL);
+
+    renderUserListPromise.then(res => {
+        usersList = res.data;
+        renderUsersList();
+    });
+
+    renderUserListPromise.catch( err => {
+        console.log(err);
+    });
+}
+
 function userAuth() {
 
     userName = prompt("Qual é o seu nome?");
@@ -59,21 +153,7 @@ function userAuth() {
         console.log("User authenticated.");
 
         /* Check and render chat messages */
-        setInterval(() => {
-
-            const renderMessagesPromise = axios.get(msgURL);
-
-            renderMessagesPromise.then(res => {
-                console.log(res.data);
-                messages = res.data;
-                renderMessages();
-            });
-
-            renderMessagesPromise.catch(err => {
-                console.log(err);
-            });
-
-        }, 3000);
+        setInterval(checkMessages, 3000);
 
         /* Check if user is still online */
         setInterval(() => {
@@ -82,9 +162,13 @@ function userAuth() {
                 name: userName
             };
 
-            axios.post(userStatusURL, userStatus);
-
+            axios.post(userStatusURL, userStatus).catch(() => {
+                window.location.reload();
+            })
         }, 5000);
+
+        /* Check user list */
+        setInterval(checkUserList, 10000);
     });
 
     /* User not authenticated*/
@@ -109,14 +193,46 @@ function sendMessage() {
     messageInput.value = '';
 
     const sendMessagePromise = axios.post(msgURL, message);
+
     sendMessagePromise.then(() => {
         console.log("Message sent!");
-        
     });
+
     sendMessagePromise.catch(() => {
         console.log("Message not sent - User offline!");
         window.location.reload();
     });
 }
 
-userAuth();
+checkMessages();
+checkUserList(); 
+userAuth(); 
+
+function toggleSidebar() {
+
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.classList.toggle("hidden");
+}
+
+function selectChatOption(optionType, selector) {
+
+    const option = document.querySelector(optionType + " .selected-option");
+
+    if (option != null) {
+
+        const lastCheckOption = option.querySelector(".check");
+
+        lastCheckOption.classList.add("hidden");
+        option.classList.remove("selected-option");
+    }
+
+    selector.classList.add("selected-option");
+
+    const currentCheckOption = selector.querySelector(".check");
+    currentCheckOption.classList.remove("hidden");
+
+    if (optionType === '.chat-visibility') {
+
+        currentSelectedVisibility = selector.querySelector("h3").innerHTML;
+    }
+}
