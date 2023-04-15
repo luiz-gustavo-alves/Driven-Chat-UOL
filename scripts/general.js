@@ -292,8 +292,11 @@ document.querySelector(".username-input").addEventListener("keyup", event => {
 
 function toggleSidebar() {
 
-    const sidebar = document.querySelector(".sidebar");
-    sidebar.classList.toggle("hidden");
+    const sidebarOverlay = document.querySelector(".sidebar-overlay");
+    const sidebarContent = document.querySelector(".sidebar-content");
+
+    sidebarOverlay.classList.toggle("hidden");
+    sidebarContent.classList.toggle("hidden");
 }
 
 function selectChatOption(optionType, selector) {
