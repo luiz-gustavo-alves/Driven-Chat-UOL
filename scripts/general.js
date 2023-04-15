@@ -45,6 +45,7 @@ function sendMessage() {
 
     axios.post(msgURL, message)
     .then(() => {
+        checkMessages();
         console.log("Message sent!");
     })
     .catch(() => {
@@ -240,8 +241,11 @@ function loadChat() {
     setInterval(() => {
 
         axios.post(userStatusURL, {name: userName})
-        .catch(() => {
-            window.location.reload();
+        .catch(err => {
+
+            if (err.response.status === 400) {
+                window.location.reload();
+            }
         })
     }, 5000);
 
@@ -262,15 +266,9 @@ function userAuth() {
     })
     .catch(err => {
 
-        console.log("User not authenticated.");
-        console.log(err);
-
-        /* Check if userName is empty or not defined */
-        if (userName === null || !userName.trim()) {
-            console.log("Invalid User.");
+        if (err.response.status === 400) {
+            window.location.reload();
         }
-
-        userNameInput.value = '';
     });
 }
 
