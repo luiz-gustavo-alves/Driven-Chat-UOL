@@ -37,6 +37,13 @@ header {
     left: 0;
 }
 
+header button {
+
+    border: none;
+    background-color: #FFFFFF;
+    height: 100%;
+}
+
 header ion-icon {
 
     width: 42px;
