@@ -45,7 +45,6 @@ function sendMessage() {
 
     axios.post(msgURL, message)
     .then(() => {
-        checkMessages();
         console.log("Message sent!");
     })
     .catch(err => {
@@ -286,7 +285,7 @@ function userAuth() {
     });
 }
 
-/* Send message by pressing enter */
+/* UserNameInput message by pressing enter */
 document.querySelector(".username-input").addEventListener("keyup", event => {
 
     if (event.key === "Enter") {
