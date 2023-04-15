@@ -16,10 +16,10 @@
             <div class="online-users"></div>
             <h2>Escolha a visibilidade:</h2>
             <div class="chat-visibility">
-                <div class="chat-visibility-content" onclick="selectChatOption('.chat-visibility', this)">
+                <div class="chat-visibility-content selected-option" onclick="selectChatOption('.chat-visibility', this)">
                     <ion-icon name="lock-open"></ion-icon>
                     <h3>Público</h3>
-                    <div class="check hidden">
+                    <div class="check">
                         <ion-icon name="checkmark"></ion-icon>
                     </div>
                 </div>
@@ -44,8 +44,13 @@
     </main>
 
     <footer>
-        <input class="message-input" type="text" placeholder="Escreva aqui..."></input>
-        <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
+        <div class="message-content">
+            <input class="message-input" type="text" placeholder="Escreva aqui..."></input>
+            <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
+        </div>
+        <div>
+            <h2 class="message-receiver">Enviando para Todos</h2>
+        </div>
     </footer>
     
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>

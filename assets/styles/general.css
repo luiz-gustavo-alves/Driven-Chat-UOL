@@ -49,22 +49,45 @@ footer {
     position: fixed;
     bottom: 0;
     left: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
 }
 
-footer .message-input {
+.message-content {
+
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.message-content .message-input {
 
     width: 80%;
     border: none;
-    outline: none;
-    font-size: 18px;
-    font-weight: 400;
-    font-style: italic;    
+    outline: none;   
 }
 
-footer ion-icon {
+.message-content .message-input::placeholder {
+
+    font-size: 18px;
+    font-style: italic;
+    color: #000000;
+}
+
+.message-content ion-icon {
 
     width: 26px;
-    height: 100%;
+    height: 26px;
+}
+
+.message-receiver {
+
+    font-size: 14px;
+    font-style: italic;
+    color: #505050;
 }
 
 .chat {

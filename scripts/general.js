@@ -2,7 +2,7 @@ let messages = [];
 let usersList = [];
 let userName;
 let currentSelectedUser = 'Todos';
-let currentSelectedVisibility;
+let currentMsgVisibility;
 
 const userURL = 'https://mock-api.driven.com.br/api/vm/uol/participants';
 const userStatusURL = 'https://mock-api.driven.com.br/api/vm/uol/status';
@@ -10,6 +10,48 @@ const msgURL = 'https://mock-api.driven.com.br/api/vm/uol/messages';
 const token = 'uno6r9oP7lrt17ZaOROMIr8i';
 
 axios.defaults.headers.common['Authorization'] = token;
+
+function sendMessage() {
+
+    const messageInput = document.querySelector(".message-input");
+
+    /* Check is messageInput is empty */
+    if (!messageInput.value.trim()) {
+        
+        console.log("Empty message!");
+        messageInput.value = '';
+        return;
+    }
+
+    let messageType;
+
+    if (currentMsgVisibility === 'Reservadamente') {
+        messageType = 'private_message';
+    }
+    else {
+       messageType = 'message';
+    }
+
+    const message = {
+        from: userName,
+        to: currentSelectedUser,
+        text: messageInput.value,
+        type: messageType
+    };
+
+    messageInput.value = '';
+
+    const sendMessagePromise = axios.post(msgURL, message);
+
+    sendMessagePromise.then(() => {
+        console.log("Message sent!");
+    });
+
+    sendMessagePromise.catch(() => {
+        console.log("Message not sent - User offline!");
+        window.location.reload();
+    });
+}
 
 function renderMessages() {
 
@@ -42,6 +84,22 @@ function renderMessages() {
                     <span class="text">${message.text}</span>
                 </li>
             `;
+       }
+
+       if (message.type === 'private_message') {
+
+            if (message.from === userName || message.to === userName) {
+
+                chat.innerHTML += `
+                    <li class="direct-message">
+                        <span class="timestamp">(${message.time})</span> 
+                        <span class="username">${message.from}</span>
+                        <span class="text">reservadamente para</span>
+                        <span class="everyone">${message.to}:</span>
+                        <span class="text">${message.text}</span>
+                    </li>
+                `;
+            }
        }
     }
 }
@@ -83,7 +141,7 @@ function renderUsersList() {
 
         if (usersList[i].name === currentSelectedUser) {
 
-            console.log(`Selecting user: ${usersList[i].name}`);
+            console.log(`Selecting user: ${currentSelectedUser}`);
 
             const selectedUser = usersContentList[i + 1];
             const check = selectedUser.querySelector(".check");
@@ -96,7 +154,7 @@ function renderUsersList() {
         }
     }
 
-    /* If current selected user is offline, checks everyone user */
+    /* If current selected user is offline, select user: Everyone */
     if (offlineUser) {
 
         console.log("Offline User! - Selecting user: Todos");
@@ -111,6 +169,7 @@ function renderUsersList() {
     }
     console.log("User list render");
 }
+
 
 function checkMessages() {
 
@@ -140,84 +199,66 @@ function checkUserList() {
     });
 }
 
+
+function loadChat() {
+
+    checkMessages();
+    checkUserList();
+
+    /* Check and render chat messages */
+    setInterval(checkMessages, 3000);
+
+    /* Check if user is still online */
+    setInterval(() => {
+
+        const userStatus = {
+            name: userName
+        };
+
+        axios.post(userStatusURL, userStatus).catch(() => {
+            window.location.reload();
+        })
+    }, 5000);
+
+    /* Check user list */
+    setInterval(checkUserList, 10000);
+}
+
 function userAuth() {
 
     userName = prompt("Qual é o seu nome?");
 
-    const authUser = {
-        name: userName
-    };
+    /* Check if userName is not defined, empty or equals to todos */
+    if (userName === null || !userName.trim() || (userName.toLocaleLowerCase() === 'todos')) {
+        userAuth();
+    }
 
-    const userAuthPromise = axios.post(userURL, authUser);
+    const userAuthPromise = axios.post(userURL, {name: userName});
 
     /* User authenticated */
     userAuthPromise.then(() => {
 
-        checkMessages();
-        checkUserList(); 
-
         console.log("User authenticated.");
-
-        /* Check and render chat messages */
-        setInterval(checkMessages, 3000);
-
-        /* Check if user is still online */
-        setInterval(() => {
-
-            const userStatus = {
-                name: userName
-            };
-
-            axios.post(userStatusURL, userStatus).catch(() => {
-                window.location.reload();
-            })
-        }, 5000);
-
-        /* Check user list */
-        setInterval(checkUserList, 10000);
+        loadChat();
     });
 
     /* User not authenticated*/
-    userAuthPromise.catch(() => {
+    userAuthPromise.catch(err => {
 
         console.log("User not authenticated.");
+        console.log(err);
         userAuth();
-    });
-}
-
-function sendMessage() {
-
-    const messageInput = document.querySelector(".message-input");
-
-    const message = {
-        from: userName,
-        to: currentSelectedUser,
-        text: messageInput.value,
-        type: "message"
-    };
-
-    messageInput.value = '';
-
-    const sendMessagePromise = axios.post(msgURL, message);
-
-    sendMessagePromise.then(() => {
-        console.log("Message sent!");
-    });
-
-    sendMessagePromise.catch(() => {
-        console.log("Message not sent - User offline!");
-        window.location.reload();
     });
 }
 
 /* Send message by pressing enter */
 const messageInput = document.querySelector(".message-input");
 messageInput.addEventListener("keyup", event => {
+
     if (event.key === "Enter") {
         sendMessage();
     }
 });
-
 
 userAuth(); 
 
@@ -235,15 +276,13 @@ function selectChatOption(optionType, selector) {
     if (option !== null) {
 
         const lastCheckOption = option.querySelector(".check");
-
         lastCheckOption.classList.add("hidden");
         option.classList.remove("selected-option");
     }
 
-    selector.classList.add("selected-option");
-
     const currentCheckOption = selector.querySelector(".check");
     currentCheckOption.classList.remove("hidden");
+    selector.classList.add("selected-option");
 
     if (optionType === '.online-users') {
         
@@ -253,6 +292,14 @@ function selectChatOption(optionType, selector) {
 
     if (optionType === '.chat-visibility') {
 
-        currentSelectedVisibility = selector.querySelector("h3").innerHTML;
+        currentMsgVisibility = selector.querySelector("h3").innerHTML;
+        console.log(`Selecting message visibility: ${currentMsgVisibility}`);
+    }
+
+    const messageReceiver = document.querySelector(".message-receiver");
+    messageReceiver.innerHTML = `Enviando para ${currentSelectedUser}`;
+
+    if (currentMsgVisibility === 'Reservadamente') {
+        messageReceiver.innerHTML += ` (reservadamente)`;
     }
 }
