@@ -49,8 +49,8 @@ function sendMessage() {
         console.log("Message sent!");
     })
     .catch(() => {
-        console.log("Message not sent - User offline!");
-        window.location.reload();
+        alert("Message not sent - User offline!");
+        window.location.reload(true);
     });
 }
 
@@ -83,7 +83,7 @@ function renderMessages() {
             `;
         }
 
-       if (message.type === 'message') {
+       else if (message.type === 'message') {
 
             chat.innerHTML += `
                 <li class="normal-message" data-test="message">
@@ -96,7 +96,7 @@ function renderMessages() {
             `;
        }
 
-       if (message.type === 'private_message') {
+       else if (message.type === 'private_message') {
 
             if (message.from === userName || message.to === userName) {
 
@@ -190,7 +190,6 @@ function renderUsersList() {
     console.log("User list render");
 }
 
-
 function checkMessages() {
 
     axios.get(msgURL)
@@ -214,7 +213,6 @@ function checkUserList() {
         console.log(err);
     });
 }
-
 
 function loadChat() {
 
@@ -244,7 +242,7 @@ function loadChat() {
         .catch(err => {
 
             if (err.response.status === 400) {
-                window.location.reload();
+                window.location.reload(true);
             }
         })
     }, 5000);
@@ -258,17 +256,29 @@ function userAuth() {
     const userNameInput = document.querySelector(".username-input");
     userName = userNameInput.value;
 
-    axios.post(userURL, {name: userName})
-    .then(() => {
+    axios.get(userURL)
+    .then( res => {
+        
+        const onlineUsers = res.data;
+        if (onlineUsers.find( user => user.name === userName)) {
 
-        console.log("User authenticated.");
-        loadChat();
-    })
-    .catch(err => {
-
-        if (err.response.status === 400) {
-            window.location.reload();
+            alert("Username already taken, please choose another.");
+            window.location.reload(true);
         }
+
+        axios.post(userURL, {name: userName})
+        .then(() => {
+    
+            console.log("User authenticated.");
+            loadChat();
+        })
+        .catch(err => {
+    
+            alert("Invalid user.");
+            if (err.response.status === 400) {
+                window.location.reload(true);
+            }
+        });
     });
 }
 

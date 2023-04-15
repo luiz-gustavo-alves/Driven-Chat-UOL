@@ -24,8 +24,8 @@
 
     <header>
         <h1><a href="./"><img src="./assets/logo 1.png"></a></h1>
-        <button data-test="open-participants">
-            <ion-icon name="people" onclick="toggleSidebar()"></ion-icon>
+        <button onclick="toggleSidebar()" data-test="open-participants">
+            <ion-icon name="people"></ion-icon>
         </button>
     </header>
 
@@ -35,8 +35,8 @@
         </ul>
     </main>
 
-    <div class="sidebar hidden" data-test="overlay">
-        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar hidden">
+        <div class="sidebar-overlay" onclick="toggleSidebar()" data-test="overlay"></div>
         <div class="sidebar-content">
             <h2>Escolha um contato para enviar mensagem:</h2>
             <ul class="online-users"></ul>
