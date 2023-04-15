@@ -48,8 +48,10 @@ function sendMessage() {
         checkMessages();
         console.log("Message sent!");
     })
-    .catch(() => {
-        alert("Message not sent - User offline!");
+    .catch(err => {
+        
+        /*alert("Message not sent - User offline!"); */
+        console.log(err);
         window.location.reload(true);
     });
 }
@@ -262,7 +264,7 @@ function userAuth() {
         const onlineUsers = res.data;
         if (onlineUsers.find( user => user.name === userName)) {
 
-            alert("Username already taken, please choose another.");
+            /* alert("Username already taken, please choose another."); */
             window.location.reload(true);
         }
 
@@ -273,8 +275,10 @@ function userAuth() {
             loadChat();
         })
         .catch(err => {
+
+            console.log(err);
     
-            alert("Invalid user.");
+            /*alert("Invalid user.");*/
             if (err.response.status === 400) {
                 window.location.reload(true);
             }

@@ -35,26 +35,24 @@
         </ul>
     </main>
 
-    <div class="sidebar">
-        <div class="sidebar-overlay hidden" onclick="toggleSidebar()" data-test="overlay"></div>
-        <div class="sidebar-content hidden">
-            <h2>Escolha um contato para enviar mensagem:</h2>
-            <ul class="online-users"></ul>
-            <h2>Escolha a visibilidade:</h2>
-            <div class="chat-visibility">
-                <div class="chat-visibility-content selected-option" onclick="selectChatOption('.chat-visibility', this)" data-test="public">
-                    <ion-icon name="lock-open"></ion-icon>
-                    <h3>Público</h3>
-                    <div class="check" data-test="check">
-                        <ion-icon name="checkmark"></ion-icon>
-                    </div>
+    <div class="sidebar-overlay hidden" onclick="toggleSidebar()" data-test="overlay"></div>
+    <div class="sidebar-content hidden">
+        <h2>Escolha um contato para enviar mensagem:</h2>
+        <ul class="online-users"></ul>
+        <h2>Escolha a visibilidade:</h2>
+        <div class="chat-visibility">
+            <div class="chat-visibility-content selected-option" onclick="selectChatOption('.chat-visibility', this)" data-test="public">
+                <ion-icon name="lock-open"></ion-icon>
+                <h3>Público</h3>
+                <div class="check" data-test="check">
+                    <ion-icon name="checkmark"></ion-icon>
                 </div>
-                <div class="chat-visibility-content" onclick="selectChatOption('.chat-visibility', this)" data-test="private">
-                    <ion-icon name="lock-closed"></ion-icon>
-                    <h3>Reservadamente</h3>
-                    <div class="check hidden" data-test="check">
-                        <ion-icon name="checkmark"></ion-icon>
-                    </div>
+            </div>
+            <div class="chat-visibility-content" onclick="selectChatOption('.chat-visibility', this)" data-test="private">
+                <ion-icon name="lock-closed"></ion-icon>
+                <h3>Reservadamente</h3>
+                <div class="check hidden" data-test="check">
+                    <ion-icon name="checkmark"></ion-icon>
                 </div>
             </div>
         </div>
