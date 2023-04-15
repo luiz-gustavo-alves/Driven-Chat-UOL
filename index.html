@@ -13,8 +13,8 @@
     <div class="user-auth-container">
         <h1><a href="./"><img src="./assets/logo 2.png"/></a></h1>
         <div class="user-auth-content">
-            <input class="username-input" type="text" placeholder="Digite seu nome"></input>
-            <button class="user-auth-button" onclick="userAuth()">Entrar</button>
+            <input class="username-input" type="text" placeholder="Digite seu nome" data-test="input-name"></input>
+            <button class="user-auth-button" onclick="userAuth()" data-test="send-name">Entrar</button>
         </div>
         <div class="loading-content hidden">
             <img class="loading-img" src="./assets/Loading_icon.gif"/>
@@ -24,7 +24,9 @@
 
     <header>
         <h1><a href="./"><img src="./assets/logo 1.png"></a></h1>
-        <ion-icon name="people" onclick="toggleSidebar()"></ion-icon>
+        <button data-test="open-participants">
+            <ion-icon name="people" onclick="toggleSidebar()"></ion-icon>
+        </button>
     </header>
 
     <main>
@@ -33,40 +35,40 @@
         </ul>
     </main>
 
-    <footer>
-        <div class="message-content">
-            <input class="message-input" type="text" placeholder="Escreva aqui..."></input>
-            <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
-        </div>
-        <div>
-            <h2 class="message-receiver">Enviando para Todos</h2>
-        </div>
-    </footer>
-
     <div class="sidebar hidden">
-        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+        <div class="sidebar-overlay" onclick="toggleSidebar()" data-test="overlay"></div>
         <div class="sidebar-content">
             <h2>Escolha um contato para enviar mensagem:</h2>
-            <div class="online-users"></div>
+            <ul class="online-users"></ul>
             <h2>Escolha a visibilidade:</h2>
             <div class="chat-visibility">
-                <div class="chat-visibility-content selected-option" onclick="selectChatOption('.chat-visibility', this)">
+                <div class="chat-visibility-content selected-option" onclick="selectChatOption('.chat-visibility', this)" data-test="public">
                     <ion-icon name="lock-open"></ion-icon>
                     <h3>Público</h3>
-                    <div class="check">
+                    <div class="check" data-test="check">
                         <ion-icon name="checkmark"></ion-icon>
                     </div>
                 </div>
-                <div class="chat-visibility-content" onclick="selectChatOption('.chat-visibility', this)">
+                <div class="chat-visibility-content" onclick="selectChatOption('.chat-visibility', this)" data-test="private">
                     <ion-icon name="lock-closed"></ion-icon>
                     <h3>Reservadamente</h3>
-                    <div class="check hidden">
+                    <div class="check hidden" data-test="check">
                         <ion-icon name="checkmark"></ion-icon>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <footer>
+        <div class="message-content">
+            <input class="message-input" type="text" placeholder="Escreva aqui..." data-test="input-message"></input>
+            <ion-icon name="paper-plane-outline" onclick="sendMessage()" data-test="send-message"></ion-icon>
+        </div>
+        <div data-test="recipient">
+            <h2 class="message-receiver">Enviando para Todos</h2>
+        </div>
+    </footer>
     
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

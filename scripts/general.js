@@ -74,7 +74,7 @@ function renderMessages() {
         if (message.type === 'status') {
             
             chat.innerHTML += `
-                <li class="status">
+                <li class="status" data-test="message">
                     <span class="timestamp">(${message.time})</span> 
                     <span class="username">${message.from}</span> 
                     <span class="text">${message.text}</span> 
@@ -85,7 +85,7 @@ function renderMessages() {
        if (message.type === 'message') {
 
             chat.innerHTML += `
-                <li class="normal-message">
+                <li class="normal-message" data-test="message">
                     <span class="timestamp">(${message.time})</span> 
                     <span class="username">${message.from}</span>
                     <span class="text">para</span>
@@ -100,7 +100,7 @@ function renderMessages() {
             if (message.from === userName || message.to === userName) {
 
                 chat.innerHTML += `
-                    <li class="direct-message">
+                    <li class="direct-message" data-test="message">
                         <span class="timestamp">(${message.time})</span> 
                         <span class="username">${message.from}</span>
                         <span class="text">reservadamente para</span>
@@ -131,13 +131,13 @@ function renderUsersList() {
     const onlineUsersList = document.querySelector(".online-users");
 
     onlineUsersList.innerHTML = `
-        <div class="user-content" onclick="selectChatOption('.online-users', this)">
+        <li class="user-content" onclick="selectChatOption('.online-users', this)" data-test="all">
             <ion-icon name="people"></ion-icon>
             <h3>Todos</h3>
-            <div class="check hidden">
+            <div class="check hidden" data-test="check">
                 <ion-icon name="checkmark"></ion-icon>
             </div>
-        </div>
+        </li>
     `;
 
     for (let i = 0; i < usersList.length; i++) {
@@ -145,13 +145,13 @@ function renderUsersList() {
         let user = usersList[i];
 
         onlineUsersList.innerHTML += `
-            <div class="user-content" onclick="selectChatOption('.online-users', this)">
+            <li class="user-content" onclick="selectChatOption('.online-users', this)" data-test="participant">
                 <ion-icon name="person-circle"></ion-icon>
                 <h3>${user.name}</h3>
-                <div class="check hidden">
+                <div class="check hidden" data-test="check">
                     <ion-icon name="checkmark"></ion-icon>
                 </div>
-            </div>
+            </li>
         `;
     }
 
