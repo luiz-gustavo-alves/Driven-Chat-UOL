@@ -9,8 +9,42 @@
     <title>Chat UOL</title>
 </head>
 <body>
+
+    <div class="user-auth-container">
+        <h1><a href="./"><img src="./assets/logo 2.png"/></a></h1>
+        <div class="user-auth-content">
+            <input class="username-input" type="text" placeholder="Digite seu nome"></input>
+            <button class="user-auth-button" onclick="userAuth()">Entrar</button>
+        </div>
+        <div class="loading-content hidden">
+            <img class="loading-img" src="./assets/Loading_icon.gif"/>
+            <span class="text">Entrando...</span>
+        </div>
+    </div>
+
+    <header>
+        <h1><a href="./"><img src="./assets/logo 1.png"></a></h1>
+        <ion-icon name="people" onclick="toggleSidebar()"></ion-icon>
+    </header>
+
+    <main>
+        <ul class="chat">
+            <li>Empty Chat</li>
+        </ul>
+    </main>
+
+    <footer>
+        <div class="message-content">
+            <input class="message-input" type="text" placeholder="Escreva aqui..."></input>
+            <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
+        </div>
+        <div>
+            <h2 class="message-receiver">Enviando para Todos</h2>
+        </div>
+    </footer>
+
     <div class="sidebar hidden">
-        <div class="sidebar-opacity" onclick="toggleSidebar()"></div>
+        <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
         <div class="sidebar-content">
             <h2>Escolha um contato para enviar mensagem:</h2>
             <div class="online-users"></div>
@@ -33,25 +67,6 @@
             </div>
         </div>
     </div>
-
-    <header>
-        <h1><img src="./assets/logo 1.png"></h1>
-        <ion-icon name="people" onclick="toggleSidebar()"></ion-icon>
-    </header>
-
-    <main>
-        <ul class="chat"></ul>
-    </main>
-
-    <footer>
-        <div class="message-content">
-            <input class="message-input" type="text" placeholder="Escreva aqui..."></input>
-            <ion-icon name="paper-plane-outline" onclick="sendMessage()"></ion-icon>
-        </div>
-        <div>
-            <h2 class="message-receiver">Enviando para Todos</h2>
-        </div>
-    </footer>
     
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

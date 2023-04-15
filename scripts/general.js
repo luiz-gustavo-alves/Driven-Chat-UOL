@@ -3,6 +3,8 @@ let usersList = [];
 let userName;
 let currentSelectedUser = 'Todos';
 let currentMsgVisibility;
+let currentLastMessage;
+let newLastMessage = document.querySelector(".chat" + " li");
 
 const userURL = 'https://mock-api.driven.com.br/api/vm/uol/participants';
 const userStatusURL = 'https://mock-api.driven.com.br/api/vm/uol/status';
@@ -41,17 +43,24 @@ function sendMessage() {
 
     messageInput.value = '';
 
-    const sendMessagePromise = axios.post(msgURL, message);
-
-    sendMessagePromise.then(() => {
+    axios.post(msgURL, message)
+    .then(() => {
         console.log("Message sent!");
-    });
-
-    sendMessagePromise.catch(() => {
+    })
+    .catch(() => {
         console.log("Message not sent - User offline!");
         window.location.reload();
     });
 }
+
+/* Send message by pressing enter */
+const messageInput = document.querySelector(".message-input");
+messageInput.addEventListener("keyup", event => {
+
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
 
 function renderMessages() {
 
@@ -101,6 +110,19 @@ function renderMessages() {
                 `;
             }
        }
+    }
+    
+    const allMessages = document.querySelectorAll("li");
+    currentLastMessage = allMessages[allMessages.length - 1];
+
+    console.log(currentLastMessage);
+    console.log(newLastMessage);
+
+    if (currentLastMessage.innerHTML != newLastMessage.innerHTML) {
+
+        newLastMessage = currentLastMessage;
+        newLastMessage.scrollIntoView();
+        console.log("New message in chat");
     }
 }
 
@@ -173,28 +195,24 @@ function renderUsersList() {
 
 function checkMessages() {
 
-    const renderMessagesPromise = axios.get(msgURL);
-
-    renderMessagesPromise.then(res => {
+    axios.get(msgURL)
+    .then(res => {
         messages = res.data;
         renderMessages();
-    });
-
-    renderMessagesPromise.catch(err => {
+    })
+    .catch(err => {
         console.log(err);
     });
 }
 
 function checkUserList() {
 
-    const renderUserListPromise = axios.get(userURL);
-
-    renderUserListPromise.then(res => {
+    axios.get(userURL)
+    .then(res => {
         usersList = res.data;
         renderUsersList();
-    });
-
-    renderUserListPromise.catch( err => {
+    })
+    .catch( err => {
         console.log(err);
     });
 }
@@ -205,17 +223,27 @@ function loadChat() {
     checkMessages();
     checkUserList();
 
+    const userAuthContent = document.querySelector(".user-auth-content");
+    const loadingContent = document.querySelector(".loading-content");
+
+    userAuthContent.classList.add("hidden");
+    loadingContent.classList.remove("hidden");
+
+    setTimeout(() => {
+
+        const userAuthContainer = document.querySelector(".user-auth-container");
+        userAuthContainer.classList.add("hidden");
+
+    }, 3000);
+
     /* Check and render chat messages */
     setInterval(checkMessages, 3000);
 
     /* Check if user is still online */
     setInterval(() => {
 
-        const userStatus = {
-            name: userName
-        };
-
-        axios.post(userStatusURL, userStatus).catch(() => {
+        axios.post(userStatusURL, {name: userName})
+        .catch(() => {
             window.location.reload();
         })
     }, 5000);
@@ -226,42 +254,36 @@ function loadChat() {
 
 function userAuth() {
 
-    userName = prompt("Qual é o seu nome?");
+    const userNameInput = document.querySelector(".username-input");
+    userName = userNameInput.value;
 
-    /* Check if userName is not defined, empty or equals to todos */
-    if (userName === null || !userName.trim() || (userName.toLocaleLowerCase() === 'todos')) {
-        userAuth();
-    }
-
-    const userAuthPromise = axios.post(userURL, {name: userName});
-
-    /* User authenticated */
-    userAuthPromise.then(() => {
+    axios.post(userURL, {name: userName})
+    .then(() => {
 
         console.log("User authenticated.");
         loadChat();
-    });
-
-    /* User not authenticated*/
-    userAuthPromise.catch(err => {
+    })
+    .catch(err => {
 
         console.log("User not authenticated.");
         console.log(err);
-        userAuth();
+
+        /* Check if userName is empty or not defined */
+        if (userName === null || !userName.trim()) {
+            console.log("Invalid User.");
+        }
+
+        userNameInput.value = '';
     });
 }
 
 /* Send message by pressing enter */
-const messageInput = document.querySelector(".message-input");
-messageInput.addEventListener("keyup", event => {
+document.querySelector(".username-input").addEventListener("keyup", event => {
 
     if (event.key === "Enter") {
-        sendMessage();
+        userAuth();
     }
 });
-
-userAuth(); 
-
 
 function toggleSidebar() {
 
