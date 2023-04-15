@@ -112,11 +112,8 @@ function renderMessages() {
        }
     }
     
-    const allMessages = document.querySelectorAll("li");
+    const allMessages = document.querySelectorAll(".chat li");
     currentLastMessage = allMessages[allMessages.length - 1];
-
-    console.log(currentLastMessage);
-    console.log(newLastMessage);
 
     if (currentLastMessage.innerHTML != newLastMessage.innerHTML) {
 
