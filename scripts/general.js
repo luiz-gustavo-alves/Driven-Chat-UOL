@@ -19,19 +19,13 @@ function sendMessage() {
 
     /* Check is messageInput is empty */
     if (!messageInput.value.trim()) {
-        
-        console.log("Empty message!");
         messageInput.value = '';
         return;
     }
 
-    let messageType;
-
+    let messageType = 'message';
     if (currentMsgVisibility === 'Reservadamente') {
         messageType = 'private_message';
-    }
-    else {
-       messageType = 'message';
     }
 
     const message = {
@@ -44,25 +38,11 @@ function sendMessage() {
     messageInput.value = '';
 
     axios.post(msgURL, message)
-    .then(() => {
-        console.log("Message sent!");
-    })
     .catch(err => {
-        
-        /*alert("Message not sent - User offline!"); */
-        console.log(err);
+        alert("Message not sent - User offline!");
         window.location.reload(true);
     });
 }
-
-/* Send message by pressing enter */
-const messageInput = document.querySelector(".message-input");
-messageInput.addEventListener("keyup", event => {
-
-    if (event.key === "Enter") {
-        sendMessage();
-    }
-});
 
 function renderMessages() {
 
@@ -74,7 +54,6 @@ function renderMessages() {
         let message = messages[i];
 
         if (message.type === 'status') {
-            
             chat.innerHTML += `
                 <li class="status" data-test="message">
                     <span class="timestamp">(${message.time})</span> 
@@ -83,9 +62,7 @@ function renderMessages() {
                 </li>
             `;
         }
-
-       else if (message.type === 'message') {
-
+        else if (message.type === 'message') {
             chat.innerHTML += `
                 <li class="normal-message" data-test="message">
                     <span class="timestamp">(${message.time})</span> 
@@ -95,12 +72,10 @@ function renderMessages() {
                     <span class="text">${message.text}</span>
                 </li>
             `;
-       }
-
-       else if (message.type === 'private_message') {
+        }
+        else if (message.type === 'private_message') {
 
             if (message.from === userName || message.to === userName) {
-
                 chat.innerHTML += `
                     <li class="direct-message" data-test="message">
                         <span class="timestamp">(${message.time})</span> 
@@ -111,17 +86,15 @@ function renderMessages() {
                     </li>
                 `;
             }
-       }
+        }
     }
     
     const allMessages = document.querySelectorAll(".chat li");
     currentLastMessage = allMessages[allMessages.length - 1];
 
-    if (currentLastMessage.innerHTML != newLastMessage.innerHTML) {
-
+    if (currentLastMessage.innerHTML !== newLastMessage.innerHTML) {
         newLastMessage = currentLastMessage;
         newLastMessage.scrollIntoView();
-        console.log("New message in chat");
     }
 }
 
@@ -142,7 +115,6 @@ function renderUsersList() {
     for (let i = 0; i < usersList.length; i++) {
 
         let user = usersList[i];
-
         onlineUsersList.innerHTML += `
             <li class="user-content" onclick="selectChatOption('.online-users', this)" data-test="participant">
                 <ion-icon name="person-circle"></ion-icon>
@@ -162,14 +134,11 @@ function renderUsersList() {
 
         if (usersList[i].name === currentSelectedUser) {
 
-            console.log(`Selecting user: ${currentSelectedUser}`);
-
             const selectedUser = usersContentList[i + 1];
-            const check = selectedUser.querySelector(".check");
 
             selectedUser.classList.add("selected-option");
-            check.classList.remove("hidden");
-            
+            selectedUser.querySelector(".check").classList.remove("hidden");
+
             offlineUser = false;
             break;
         }
@@ -177,18 +146,14 @@ function renderUsersList() {
 
     /* If current selected user is offline, select user: Everyone */
     if (offlineUser) {
-
-        console.log("Offline User! - Selecting user: Todos");
          
         const everyoneUser = usersContentList[0];
-        const check = everyoneUser.querySelector(".check");
 
         everyoneUser.classList.add("selected-option");
-        check.classList.remove("hidden");
+        everyoneUser.querySelector(".check").classList.remove("hidden");
 
         currentSelectedUser = 'Todos';
     }
-    console.log("User list render");
 }
 
 function checkMessages() {
@@ -220,18 +185,11 @@ function loadChat() {
     checkMessages();
     checkUserList();
 
-    const userAuthContent = document.querySelector(".user-auth-content");
-    const loadingContent = document.querySelector(".loading-content");
+    document.querySelector(".user-auth-content").classList.add("hidden");
+    document.querySelector(".loading-content").classList.remove("hidden");
 
-    userAuthContent.classList.add("hidden");
-    loadingContent.classList.remove("hidden");
-
-    setTimeout(() => {
-
-        const userAuthContainer = document.querySelector(".user-auth-container");
-        userAuthContainer.classList.add("hidden");
-
-    }, 3000);
+    /* Remove loading screen */
+    setTimeout(() => document.querySelector(".user-auth-container").classList.add("hidden"), 1000);
 
     /* Check and render chat messages */
     setInterval(checkMessages, 3000);
@@ -241,7 +199,6 @@ function loadChat() {
 
         axios.post(userStatusURL, {name: userName})
         .catch(err => {
-
             if (err.response.status === 400) {
                 window.location.reload(true);
             }
@@ -259,25 +216,22 @@ function userAuth() {
 
     axios.get(userURL)
     .then( res => {
-        
-        const onlineUsers = res.data;
-        if (onlineUsers.find( user => user.name === userName)) {
 
-            /* alert("Username already taken, please choose another."); */
-            window.location.reload(true);
+        const onlineUsers = res.data;
+
+        if (onlineUsers.find( user => user.name === userName)) {
+            userNameInput.value = '';
+            alert("Username already taken, please choose another.");
+            return;
         }
 
         axios.post(userURL, {name: userName})
-        .then(() => {
-    
-            console.log("User authenticated.");
-            loadChat();
-        })
+        .then(loadChat())
         .catch(err => {
 
-            console.log(err);
-    
-            /*alert("Invalid user.");*/
+            userNameInput.value = '';
+            alert("Invalid user.");
+
             if (err.response.status === 400) {
                 window.location.reload(true);
             }
@@ -285,21 +239,10 @@ function userAuth() {
     });
 }
 
-/* UserNameInput message by pressing enter */
-document.querySelector(".username-input").addEventListener("keyup", event => {
-
-    if (event.key === "Enter") {
-        userAuth();
-    }
-});
-
 function toggleSidebar() {
 
-    const sidebarOverlay = document.querySelector(".sidebar-overlay");
-    const sidebarContent = document.querySelector(".sidebar-content");
-
-    sidebarOverlay.classList.toggle("hidden");
-    sidebarContent.classList.toggle("hidden");
+    document.querySelector(".sidebar-overlay").classList.toggle("hidden");
+    document.querySelector(".sidebar-content").classList.toggle("hidden");
 }
 
 function selectChatOption(optionType, selector) {
@@ -307,26 +250,19 @@ function selectChatOption(optionType, selector) {
     const option = document.querySelector(optionType + " .selected-option");
 
     if (option !== null) {
-
-        const lastCheckOption = option.querySelector(".check");
-        lastCheckOption.classList.add("hidden");
+        option.querySelector(".check").classList.add("hidden");
         option.classList.remove("selected-option");
     }
 
-    const currentCheckOption = selector.querySelector(".check");
-    currentCheckOption.classList.remove("hidden");
+    selector.querySelector(".check").classList.remove("hidden");
     selector.classList.add("selected-option");
 
-    if (optionType === '.online-users') {
-        
+    if (optionType === '.online-users') { 
         currentSelectedUser = selector.querySelector("h3").innerHTML;
-        console.log(`Selecting user: ${currentSelectedUser}`);
     }
 
     if (optionType === '.chat-visibility') {
-
         currentMsgVisibility = selector.querySelector("h3").innerHTML;
-        console.log(`Selecting message visibility: ${currentMsgVisibility}`);
     }
 
     const messageReceiver = document.querySelector(".message-receiver");
@@ -336,3 +272,23 @@ function selectChatOption(optionType, selector) {
         messageReceiver.innerHTML += ` (reservadamente)`;
     }
 }
+
+/*
+ *  Event listeners 
+ */ 
+
+/* Send message by pressing enter */
+document.querySelector(".message-input").addEventListener("keyup", event => {
+
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
+
+/* Username input by pressing enter */
+document.querySelector(".username-input").addEventListener("keyup", event => {
+
+    if (event.key === "Enter") {
+        userAuth();
+    }
+});
