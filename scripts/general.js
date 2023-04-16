@@ -45,6 +45,16 @@ function sendMessage() {
     });
 }
 
+function changeMessageReceiver() {
+
+    const messageReceiver = document.querySelector(".message-receiver");
+    messageReceiver.innerHTML = `Enviando para ${currentSelectedUser}`;
+
+    if (currentMsgVisibility === 'Reservadamente') {
+        messageReceiver.innerHTML += ` (reservadamente)`;
+    }
+}
+
 function renderMessages() {
 
     const chat = document.querySelector(".chat");
@@ -97,6 +107,8 @@ function renderMessages() {
         newLastMessage = currentLastMessage;
         newLastMessage.scrollIntoView();
     }
+
+    changeMessageReceiver();
 }
 
 function renderUsersList() {
@@ -279,13 +291,7 @@ function selectChatOption(optionType, selector) {
     if (optionType === '.chat-visibility') {
         currentMsgVisibility = selector.querySelector("h3").innerHTML;
     }
-
-    const messageReceiver = document.querySelector(".message-receiver");
-    messageReceiver.innerHTML = `Enviando para ${currentSelectedUser}`;
-
-    if (currentMsgVisibility === 'Reservadamente') {
-        messageReceiver.innerHTML += ` (reservadamente)`;
-    }
+    changeMessageReceiver();
 }
 
 /*
