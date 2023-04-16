@@ -38,6 +38,7 @@ function sendMessage() {
     messageInput.value = '';
 
     axios.post(msgURL, message)
+    .then(checkMessages())
     .catch(err => {
         alert("Message not sent - User offline!");
         window.location.reload(true);
@@ -182,13 +183,6 @@ function checkUserList() {
 
 function loadChat() {
 
-    checkMessages();
-    checkUserList();
-
-    document.querySelector(".user-auth-content").classList.add("hidden");
-    document.querySelector(".loading-content").classList.remove("hidden");
-
-    /* Remove loading screen */
     setTimeout(() => document.querySelector(".user-auth-container").classList.add("hidden"), 1000);
 
     /* Check and render chat messages */
@@ -209,10 +203,20 @@ function loadChat() {
     setInterval(checkUserList, 10000);
 }
 
+function toggleLoadScreen() {
+
+    document.querySelector(".user-auth-content").classList.toggle("hidden");
+    document.querySelector(".loading-content").classList.toggle("hidden");
+}
+
 function userAuth() {
 
     const userNameInput = document.querySelector(".username-input");
     userName = userNameInput.value;
+
+    let isUserAuth = true;
+
+    toggleLoadScreen();
 
     axios.get(userURL)
     .then( res => {
@@ -220,29 +224,40 @@ function userAuth() {
         const onlineUsers = res.data;
 
         if (onlineUsers.find( user => user.name === userName)) {
+
+            isUserAuth = false;
             userNameInput.value = '';
+
             alert("Username already taken, please choose another.");
+            toggleLoadScreen();
             return;
         }
 
         axios.post(userURL, {name: userName})
-        .then(loadChat())
         .catch(err => {
 
+            isUserAuth = false;
             userNameInput.value = '';
-            alert("Invalid user.");
 
-            if (err.response.status === 400) {
-                window.location.reload(true);
-            }
+            alert("Invalid user.");
+            toggleLoadScreen();
+            return;
         });
     });
+
+    setTimeout(() => {
+
+        if (isUserAuth) {
+            checkMessages();
+            checkUserList();
+            loadChat();
+        }
+    }, 2000)
 }
 
 function toggleSidebar() {
 
-    document.querySelector(".sidebar-overlay").classList.toggle("hidden");
-    document.querySelector(".sidebar-content").classList.toggle("hidden");
+    document.querySelector(".sidebar").classList.toggle("hidden");
 }
 
 function selectChatOption(optionType, selector) {
