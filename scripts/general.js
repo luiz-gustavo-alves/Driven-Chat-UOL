@@ -39,7 +39,7 @@ function sendMessage() {
 
     axios.post(msgURL, message)
     .then(checkMessages())
-    .catch(err => {
+    .catch(() => {
         alert("Message not sent - User offline!");
         window.location.reload(true);
     });
@@ -176,8 +176,9 @@ function checkMessages() {
         messages = res.data;
         renderMessages();
     })
-    .catch(err => {
-        console.log(err);
+    .catch(() => {
+        alert("Server Error");
+        window.location.reload(true);
     });
 }
 
@@ -188,8 +189,9 @@ function checkUserList() {
         usersList = res.data;
         renderUsersList();
     })
-    .catch( err => {
-        console.log(err);
+    .catch(() => {
+        alert("Server Error");
+        window.location.reload(true);
     });
 }
 
@@ -246,7 +248,7 @@ function userAuth() {
         }
 
         axios.post(userURL, {name: userName})
-        .catch(err => {
+        .catch(() => {
 
             isUserAuth = false;
             userNameInput.value = '';
